@@ -33,80 +33,16 @@
         h1 {
             text-align: center;
             font-weight: bold;
-            font-size: 1.5em;
+            font-size: 1.5em; /* Title font size */
         }
         .alert {
             color: red;
             font-weight: bold;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.2em; /* Slightly smaller than the title */
             margin-top: 10px;
         }
     </style>
-    <script>
-        // Company's location coordinates (302 McCarty St, Houston, TX)
-        const companyLat = 29.7678;
-        const companyLon = -95.3102;
-
-        // Allowed radius in kilometers (2 km)
-        const allowedRadius = 2;
-
-        // Haversine formula to calculate the distance between two coordinates
-        function haversineDistance(lat1, lon1, lat2, lon2) {
-            const toRad = (angle) => (Math.PI / 180) * angle;
-            const R = 6371; // Earth's radius in kilometers
-
-            const dLat = toRad(lat2 - lat1);
-            const dLon = toRad(lon2 - lon1);
-
-            const a = Math.sin(dLat / 2) ** 2 +
-                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                      Math.sin(dLon / 2) ** 2;
-
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
-        }
-
-        // Function to check user's location on page load
-        function checkLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const userLat = position.coords.latitude;
-                        const userLon = position.coords.longitude;
-
-                        const distance = haversineDistance(companyLat, companyLon, userLat, userLon);
-
-                        if (distance <= allowedRadius) {
-                            document.body.style.display = 'block'; // Show content
-                        } else {
-                            document.body.innerHTML = 
-                              '<h1>Access Limited</h1><p>Access limited to TenarisMcCarty Facility. Please contact your supervisor if necessary.</p>';
-                        }
-                    },
-                    (error) => {
-                        if (error.code === error.PERMISSION_DENIED) {
-                            alert('You have denied the location access. The contact list will only be accessible if scanned in TenarisMcCarty. Please reload the page and allow location access to proceed.');
-                        } else {
-                            console.error('Geolocation error:', error);
-                            document.body.innerHTML = 
-                              '<h1>Browser Not Supported</h1><p>Browser not supported. Please copy the link and try in a different browser.</p>';
-                        }
-                    }
-                );
-            } else {
-                alert('Browser not supported. Please copy the link and try in a different browser.');
-                document.body.innerHTML = 
-                  '<h1>Browser Not Supported</h1><p>Browser not supported. Please copy the link and try in a different browser.</p>';
-            }
-        }
-
-        // Call the function on page load
-        window.onload = function () {
-            document.body.style.display = 'none'; // Hide content until location is validated
-            checkLocation();
-        };
-    </script>
 </head>
 <body>
     <h1>First Aiders Contact List - TenarisMcCarty</h1>
